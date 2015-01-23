@@ -7,6 +7,11 @@ class Client
     @id = attributes[:id]
   end
 
+  define_method(:save) do
+    result = DB.exec("INSERT INTO clients (name, date) VALUES ('#{@name}', '#{@date}') RETURNING id;")
+    @id = result.first()['id'].to_i()
+  end
+
   define_singleton_method(:all) do
     expected_clients = DB.exec("SELECT * FROM clients;")
     clients = []
@@ -17,11 +22,6 @@ class Client
       clients.push(Client.new({:name => name, :date => date, :id => id}))
     end
     clients
-  end
-
-  define_method(:save) do
-    result = DB.exec("INSERT INTO clients (name, date) VALUES ('#{@name}', '#{@date}') RETURNING id;")
-    @id = result.first()['id'].to_i()
   end
 
   define_method(:==) do |another_client|
@@ -50,7 +50,7 @@ class Client
       returned_stylists.each() do |stylist_hash|
         stylist_name = stylist_hash['stylist_name']
         id = stylist_hash['id'].to_i()
-        stylistss.push(Stylist.new({:stylist_name => stylist_name, :id => id}))
+        stylists.push(Stylist.new({:stylist_name => stylist_name, :id => id}))
       end
     stylists
   end

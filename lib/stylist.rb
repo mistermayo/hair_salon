@@ -10,7 +10,7 @@ class Stylist
     result = DB.exec("INSERT INTO stylists (stylist_name) VALUES ('#{@stylist_name}') RETURNING id;")
     @id = result.first()['id'].to_i()
   end
-  
+
   define_singleton_method(:all) do
     returned_stylists = DB.exec("SELECT * FROM stylists;")
     stylists = []
@@ -38,7 +38,7 @@ class Stylist
   define_method(:add_client_to_stylist) do |client|
     existing_client = DB.exec("SELECT * FROM clients_stylists WHERE stylists_id = #{self.id()} AND clients_id = #{client.id()};")
     if ! existing_client.first()
-      DB.exec("INSERT INTO clients_stylists (clients_id, stylists_id) VALUES (#{expense.id()}, #{self.id()});")
+      DB.exec("INSERT INTO clients_stylists (clients_id, stylists_id) VALUES (#{client.id()}, #{self.id()});")
     end
   end
 
