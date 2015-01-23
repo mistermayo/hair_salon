@@ -14,13 +14,13 @@ class Client
       name = client["name"]
       date = client["date"]
       id = client["id"].to_i()
-      clients.push(Client.new({:name => "sasha", :date => "2014-01-01", :id => nil})
+      clients.push(Client.new({:name => name, :date => date, :id => id}))
     end
     clients
   end
 
   define_method(:save) do
-    result = DB.exec("INSERT INTO clients (name, date) VALUES ('#{name}', '#{date}') RETURNING id;")
+    result = DB.exec("INSERT INTO clients (name, date) VALUES ('#{@name}', '#{@date}') RETURNING id;")
     @id = result.first()['id'].to_i()
   end
 
@@ -36,17 +36,23 @@ class Client
     end
     @found_client
   end
+
+  define_method(:add_stylist_to_client) do |stylist|
+    existing_stylist = DB.exec("SELECT * FROM clients_stylists WHERE clients_id = #{self.id()} AND stylists_id = #{stylist.id()};")
+    if ! existing_stylist.first()
+      DB.exec("INSERT INTO clients_stylists (clients_id, stylists_id) VALUES (#{self.id()}, #{stylist.id()});")
+    end
+  end
+
+  define_method(:stylists) do
+    stylists = []
+      returned_stylists = DB.exec("SELECT stylists.* FROM stylists JOIN clients_stylists ON (stylists.id = clients_stylists.stylists_id) JOIN clients ON (clients.id = clients_stylists.clients_id) WHERE clients.id = #{self.id()};")
+      returned_stylists.each() do |stylist_hash|
+        stylist_name = stylist_hash['stylist_name']
+        id = stylist_hash['id'].to_i()
+        stylistss.push(Stylist.new({:stylist_name => stylist_name, :id => id}))
+      end
+    stylists
+  end
+
 end
-#
-#     define_method(:categories) do
-#     categories = []
-#       returned_categories = DB.exec("SELECT categories.* FROM categories JOIN expenses_categories ON (categories.id = expenses_categories.categories_id) JOIN expenses ON (expenses.id = expenses_categories.expenses_id) WHERE expenses.id = #{self.id()};")
-#       returned_categories.each() do |category_hash|
-#         category_name = category_hash['category_name']
-#         id = category_hash['id'].to_i()
-#         categories.push(Category.new({:category_name => category_name, :id => id}))
-#       end
-#     categories
-#   end
-#
-# end

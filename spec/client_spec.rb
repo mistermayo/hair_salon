@@ -1,6 +1,4 @@
-require('rspec')
-require('client')
-# require('spec_helper')
+require('spec_helper')
 
 describe(Client) do
 
@@ -19,10 +17,11 @@ describe(Client) do
   end
 
   describe("#id") do
-    it("returns the id number of the client")
+    it("returns the id of the client")
       client_1 = Client.new({:name => "sasha", :date => "2014-01-01", :id => nil})
       client_1.save()
       expect(client_1.id()).to(be_an_instance_of(Fixnum))
+      binding.pry
     end
   end
 
@@ -49,4 +48,17 @@ describe(Client) do
       expect(Client.find(client_1.id())).to(eq(client_1))
     end
   end
-end
+
+  describe('#stylists') do
+    it("returns the stylist that belongs to a specified client") do
+      test_stylist = Stylist.new({:stylist_name => "wanda", :id => nil})
+      test_stylist.save()
+      test_stylist2 = Stylist.new({:stylist_name => "billy", :id => nil})
+      test_stylist2.save()
+      client_1 = Client.new({:name => "sasha", :date => "2014-01-01", :id => nil})
+      client_1.save()
+      client_1.add_stylist_to_client(test_stylist)
+      client_1.add_stylist_to_client(test_stylist2)
+      expect(client_1.stylists()).to(eq([test_stylist, test_stylist2]))
+    end
+  end
