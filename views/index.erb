@@ -1,15 +1,15 @@
-<h1>Stylist</h1>
+<h1>Hair Salon</h1>
 
-<p>Add your clients!</p>
+<p>Add in a stylist:</p>
 
-<form action="/stylists" method="post">
-  <label for="name">Assign a name to your list:</label>
-  <input id="name" name="name" type="text">
+<form action="/stylist" method="post">
+  <label for="stylist_name">Assign a name to your stylist:</label>
+  <input id="stylist_name" name="stylist_name" type="text">
 
-  <button type="submit">Add Stylist</button>
+  <button type="submit">Add list</button>
 </form>
 
-<% if @stylist.any?() %>
+<% if @stylists.any?() %>
   <p>Click on a stylist to see their clients:</p>
 
   <ul>
@@ -18,5 +18,5 @@
     <% end %>
   </ul>
 <% else %>
-  <p>There are no stylists here yet!</p>
+  <p>There are no stylists yet!</p>
 <% end %>

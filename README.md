@@ -16,10 +16,10 @@ Setup Instructions
 4. Open a third tab and open psql
 5. Create a database for hair_salon
 6. Create a test database
-7. Create a table for clients, stylists and a third table called "clients_stylists"
+7. Create a table for clients and stylists
 8. Add columns to your clients table for an id, a name and a date
 9. Create columns for your stylists table for an id, and a name
-10. Create columns for your clients_stylists table for an id, a clients_id and a stylists_id
+10. Create columns for your clients table for the stylist_id
 11. Go into your project in your first terminal window and type "ruby app.rb"
 12. See your website on localhost:4567 !!!
 

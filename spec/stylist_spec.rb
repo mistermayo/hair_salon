@@ -2,6 +2,12 @@ require('spec_helper')
 
 describe(Stylist) do
 
+  describe(".all") do
+    it("returns empty at first") do
+      expect(Stylist.all()).to(eq([]))
+    end
+  end
+
   describe("#stylist_name") do
     it("returns the name of the stylist") do
       test_stylist = Stylist.new({:stylist_name => "wanda", :id => nil})
@@ -17,9 +23,11 @@ describe(Stylist) do
     end
   end
 
-  describe(".all") do
-    it("returns empty at first") do
-      expect(Stylist.all()).to(eq([]))
+   describe("#save") do
+    it("lets you save stylists to the database") do
+      stylist = Stylist.new({:stylist_name => "wanda", :id => nil})
+      stylist.save()
+      expect(Stylist.all()).to(eq([stylist]))
     end
   end
 
@@ -31,7 +39,7 @@ describe(Stylist) do
     end
   end
 
-  describe("find") do
+  describe(".find") do
     it("returns a stylist by their id number") do
       test_stylist = Stylist.new({:stylist_name => "wanda", :id => nil})
       test_stylist.save()
@@ -41,16 +49,14 @@ describe(Stylist) do
     end
   end
 
-  describe("clients") do
+  describe("#clients") do
     it("returns an array of clients that belong to the specific stylist") do
       test_stylist = Stylist.new({:stylist_name => "wanda", :id => nil})
       test_stylist.save()
-      client_1 = Client.new({:name => "sasha", :date => "2014-01-01 00:00:00", :id => nil})
+      client_1 = Client.new({:name => "sasha", :date => "2014-01-01 00:00:00", :stylist_id => test_stylist.id()})
       client_1.save()
-      client_2 = Client.new({:name => "george", :date => "2014-01-01 00:00:00", :id => nil})
+      client_2 = Client.new({:name => "bobby", :date => "2014-01-01 00:00:00", :stylist_id => test_stylist.id()})
       client_2.save()
-      test_stylist.add_client_to_stylist(client_1)
-      test_stylist.add_client_to_stylist(client_2)
       expect(test_stylist.clients()).to(eq([client_1, client_2]))
     end
   end
